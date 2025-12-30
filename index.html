@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CriccSojeeb Live</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.js"></script>
+
+<style>
+body{
+  margin:0;
+  background:#050b18;
+  font-family:Arial;
+  color:#fff;
+}
+.header{
+  background:#0a1f44;
+  padding:12px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+.sub{
+  font-size:13px;
+  opacity:.8;
+}
+.player-box{
+  max-width:100%;
+  margin:10px;
+}
+#loading{
+  position:fixed;
+  inset:0;
+  background:#050b18;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+}
+.spinner{
+  width:50px;
+  height:50px;
+  border:5px solid #1e3a8a;
+  border-top:5px solid #00ffcc;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+.info{
+  background:#0a1f44;
+  margin:10px;
+  padding:10px;
+  border-radius:8px;
+  font-size:14px;
+}
+.counter{
+  color:#00ffcc;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body oncontextmenu="return false">
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Loading CriccSojeeb Live...</p>
+</div>
+
+<div class="header">
+  CriccSojeeb
+  <div class="sub">Live Cricket Streaming</div>
+</div>
+
+<div class="info">
+ 🔴 LIVE NOW <br>
+ 👁️ Watching Now: <span class="counter" id="users"></span>
+</div>
+
+<div class="player-box">
+  <video id="player" controls></video>
+</div>
+
+<script>
+// 🔐 Disable basic inspect
+document.onkeydown=function(e){
+if(e.keyCode==123){return false;}
+if(e.ctrlKey&&e.shiftKey&&e.keyCode==73){return false;}
+};
+
+// 🔔 Telegram Smart Popup (One Time)
+if(!localStorage.getItem("tgjoined")){
+  setTimeout(()=>{
+    if(confirm("Join CriccSojeeb Telegram Channel for more live links?")){
+      window.location.href="https://t.me/CriccSojeeb";
+    }else{
+      localStorage.setItem("tgjoined","yes");
+    }
+  },1500);
+}
+
+// ▶️ Player + Quality
+const video=document.getElementById("player");
+const source="https://bd-mc-fdlive.fancode.com/mumbai/138735_english_hls_5368e9832344607_1ta-di_h264/index.m3u8";
+
+if(Hls.isSupported()){
+  const hls=new Hls();
+  hls.loadSource(source);
+  hls.attachMedia(video);
+}else{
+  video.src=source;
+}
+
+const player=new Plyr(video,{
+  quality:{
+    default:'auto',
+    options:['auto',1080,720,480,360],
+    forced:true
+  }
+});
+
+// ⏳ Loading hide
+video.addEventListener('loadeddata',()=>{
+  document.getElementById("loading").style.display="none";
+});
+
+// 👁️ Fake Live User Counter
+let users= Math.floor(Math.random()*500)+800;
+document.getElementById("users").innerText=users;
+setInterval(()=>{
+  users += Math.floor(Math.random()*5)-2;
+  if(users<500) users=500;
+  document.getElementById("users").innerText=users;
+},3000);
+</script>
+<!-- 🔵 CriccSojeeb Telegram Section -->
+<div class="cricc-tg-wrap">
+
+  <div class="cricc-tg-title">
+    📢 Join CriccSojeeb Telegram Channels
+  </div>
+
+  <a href="https://t.me/CriccSojeeb" target="_blank" class="cricc-btn live">
+    🔔 Join for Live Matches Links
+  </a>
+
+  <a href="https://t.me/+u1Mb0ix7KMkyMDJl" target="_blank" class="cricc-btn clips">
+    🎯 𝑳𝒊𝒗𝒆 𝑴𝒂𝒕𝒄𝒉𝒆𝒔 𝑪𝒍𝒊𝒑𝒔 – 𝑾𝒊𝒄𝒌𝒆𝒕𝒔 & 𝑩𝒐𝒖𝒏𝒅𝒂𝒓𝒊𝒆𝒔
+  </a>
+
+  <a href="https://t.me/+EJP2jkxFb-phMThl" target="_blank" class="cricc-btn innings">
+    🧠 𝑪𝒓𝒊𝒄𝒄𝑺𝒐𝒋𝒆𝒆𝒃 𝑰𝒏𝒏𝒊𝒏𝒈𝒔 & 𝑺𝒑𝒆𝒍𝒍
+  </a>
+
+  <button class="cricc-btn share" onclick="shareCriccSojeeb()">
+    ❤️ Share This Page
+  </button>
+
+</div>
+
+<style>
+.cricc-tg-wrap{
+  margin:16px;
+  background:linear-gradient(135deg,#0a1f44,#020617);
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 0 15px rgba(0,255,204,0.15);
+}
+.cricc-tg-title{
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+.cricc-btn{
+  display:block;
+  width:100%;
+  margin:10px 0;
+  padding:13px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:bold;
+  text-decoration:none;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  transition:0.3s;
+}
+.cricc-btn.live{
+  background:#0088cc;
+}
+.cricc-btn.clips{
+  background:#1e40af;
+}
+.cricc-btn.innings{
+  background:#4f46e5;
+}
+.cricc-btn.share{
+  background:#16a34a;
+}
+.cricc-btn:hover{
+  transform:scale(1.02);
+  opacity:0.95;
+}
+</style>
+
+<script>
+function shareCriccSojeeb(){
+  if(navigator.share){
+    navigator.share({
+      title: 'CriccSojeeb Live',
+      text: 'Watch Live Matches & Clips on CriccSojeeb',
+      url: window.location.href
+    });
+  }else{
+    alert("Copy & share this link:\n"+window.location.href);
+  }
+}
+</script>
+
+</body>
+</html>
