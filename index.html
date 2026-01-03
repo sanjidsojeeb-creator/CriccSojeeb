@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>CriccSojeeb Live</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.js"></script>
 
@@ -12,110 +13,161 @@
 body{
   margin:0;
   background:#050b18;
-  font-family:Arial;
+  font-family:Arial, sans-serif;
   color:#fff;
 }
 .header{
   background:#0a1f44;
-  padding:12px;
+  padding:14px;
   text-align:center;
   font-size:22px;
   font-weight:bold;
 }
-.sub{
-  font-size:13px;
-  opacity:.8;
-}
-.player-box{
-  max-width:100%;
-  margin:10px;
-}
-#loading{
-  position:fixed;
-  inset:0;
-  background:#050b18;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  z-index:9999;
-}
-.spinner{
-  width:50px;
-  height:50px;
-  border:5px solid #1e3a8a;
-  border-top:5px solid #00ffcc;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin{100%{transform:rotate(360deg)}}
-
+.sub{font-size:13px;opacity:.8}
+.player-box{margin:10px}
 .info{
-  background:#0a1f44;
   margin:10px;
+  background:#0a1f44;
   padding:10px;
-  border-radius:8px;
+  border-radius:10px;
   font-size:14px;
 }
-.counter{
-  color:#00ffcc;
+.counter{color:#00ffcc;font-weight:bold}
+.tg-box{
+  margin:15px;
+  padding:15px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#0a1f44,#020617);
+  text-align:center;
+}
+.tg-box a{
+  display:block;
+  margin:10px 0;
+  padding:13px;
+  border-radius:10px;
+  background:#0088cc;
+  color:#fff;
   font-weight:bold;
+  text-decoration:none;
 }
 </style>
 </head>
 
 <body oncontextmenu="return false">
 
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Loading CriccSojeeb Live...</p>
-</div>
-
 <div class="header">
-  CriccSojeeb
-  <div class="sub">Live Cricket Streaming</div>
+  CriccSojeeb Live
+  <div class="sub">Live Sports Streaming</div>
 </div>
 
 <div class="info">
  🔴 LIVE NOW <br>
- 👁️ Watching Now: <span class="counter" id="users"></span>
+ 👁️ Watching: <span class="counter" id="users">0</span>
 </div>
 
 <div class="player-box">
-  <video id="player" controls></video>
+  <video id="player" controls playsinline></video>
+</div>
+
+<div class="tg-box">
+  <a href="https://t.me/CriccSojeeb" target="_blank">
+    🔔 Join Telegram for Live Match Links
+  </a>
 </div>
 
 <script>
-// 🔐 Disable basic inspect
-document.onkeydown=function(e){
-if(e.keyCode==123){return false;}
-if(e.ctrlKey&&e.shiftKey&&e.keyCode==73){return false;}
+// 🔐 Basic Inspect Protection
+document.onkeydown = function(e){
+  if(e.keyCode==123) return false;
+  if(e.ctrlKey && e.shiftKey && e.keyCode==73) return false;
 };
 
-// 🔔 Telegram Smart Popup (One Time)
-if(!localStorage.getItem("tgjoined")){
+// 🔔 Telegram Join Popup (Join / Skip)
+if(!localStorage.getItem("tg_skip")){
   setTimeout(()=>{
-    if(confirm("Join CriccSojeeb Telegram Channel for more live links?")){
+    if(confirm("Join CriccSojeeb Telegram Channel for live links?")){
       window.location.href="https://t.me/CriccSojeeb";
     }else{
-      localStorage.setItem("tgjoined","yes");
+      localStorage.setItem("tg_skip","yes");
     }
   },1500);
 }
 
-// ▶️ Player + Quality
-const video=document.getElementById("player");
-const source="https://aps33.playlist.live-video.net/v1/playlist/CsgF7VT1hRjfyF5hN_szD6cIdQmZnh5ZtUqtOQwoORMJFELRa6y_u7yykTyknLr591x9NOHoAqq8739kA-46Ny_1gNhx8P3hb1u0kzsvYqC3-LXifYjLX68L7aQXMWxBIzDon1GH6YuiiL5YuO7xHPWSoH9gH5WXtLE3jrBINkjD8ec7Rqv6G9xdQrKJLn_dBD85n4GSRtOwRb3-8IJ4_1O9UFmL3jZ6cDQru-FxmGp4EFlr39HdFGi5Z-HbQ2XFAoI7FOPgEXMA5SYfkecUJ6om249LvSa-3421jeV31H30of3cljHERqiztoeXWGJVr2omsif7t5z9iqpvNJm2SC6SKU76t-e3fupBlFpmPXCCOCz29qy27bnQRseAdrZYBRSXBAb4bClNFJ9ELPE2O7e9yG5iYCP6FOzcuZbB2oZmP2L8qrfz_i5bPXdROtelBAO9kd5O57MkWlgmmFHW6PArzkvH8_Hr35DPx36ibb7PqaOZjoNP4cY-r4RMdfP5u-OCP7_GKLOdCmwR6AOfCzVFSN-9wzmxYzJ2YqRBRiSlh12-CyExKkVjuY6vIDIR6JTXCKiwMgVyXdD6uR1RoeVda66-x0amijP4NOjQphxktjIu9FahOL3R3baaQYZ7l0nSm6orISZ4xaiLH5d7sz_BaBNnFW1z2fZI-GHLGSg3OSKsTalYE7GhZUXBidfGOq-jO-QaW1-qz2X8dfuwC4sTIX5IxuKUhUaJ8dSFaFV9uxgIrz3q_3PXalDJmeM_7XNzEsafFgxoJ83Ndaf2gtm5NUsxJR12tuDrtMJc0Z7lemco8UNurlL8tjFUeffzqOI8u40TUIjo0DWLGl_obm4thqnnnbsbv9vCssMyD8paiWmGuUvLpCYHrUBaR94oOMfzBoiiSBvvYg7IurDAfBO-QcUbUrqqiVs7AD_1Hf8yKMLA-_xj2C_kPBoMLQnVtTH1qW4cEguqIAEqCXVzLXdlc3QtMjCIDg.m3u8";
+/* ========== ADMIN PANEL (CHANNEL LIST) ========== */
+const CHANNELS = {
+  criclife: {
+    name:"CricLife",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=303627"
+  },
+  cricbuzz: {
+    name:"Cricbuzz",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=303629"
+  },
+  willow: {
+    name:"Willow",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=13141"
+  },
+  willow2: {
+    name:"Willow 2",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=282231"
+  },
+  sky: {
+    name:"Sky Sports",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=10527"
+  },
+  tnt: {
+    name:"TNT Sports",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=77413"
+  },
+  fox: {
+    name:"Fox Sports",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=197185"
+  },
+  star: {
+    name:"Star Sports",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276736"
+  },
+  sony: {
+    name:"Sony Sports",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276737"
+  },
+  zee: {
+    name:"Zee Cinema",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276907"
+  },
+  geo: {
+    name:"Geo Super",
+    url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=49242"
+  },
+  fancode: {
+    name:"FanCode",
+    url:"https://bd-mc-fdlive.fancode.com/mumbai/138739_english_hls_3e7a73d0358892_1ta-di_h264/index.m3u8"
+  }
+};
 
+/* ========== STREAM SELECTOR ========== */
+const params = new URLSearchParams(window.location.search);
+const ch = params.get("ch");
+
+if(!ch || !CHANNELS[ch]){
+  alert("❌ Invalid or Private Stream Link");
+  throw new Error("No stream selected");
+}
+
+const source = CHANNELS[ch].url;
+const video = document.getElementById("player");
+
+// ▶️ HLS Player
 if(Hls.isSupported()){
-  const hls=new Hls();
+  const hls = new Hls({autoStartLoad:true});
   hls.loadSource(source);
   hls.attachMedia(video);
 }else{
-  video.src=source;
+  video.src = source;
 }
 
-const player=new Plyr(video,{
+// 🎛 Plyr UI
+new Plyr(video,{
   quality:{
     default:'auto',
     options:['auto',1080,720,480,360],
@@ -123,108 +175,15 @@ const player=new Plyr(video,{
   }
 });
 
-// ⏳ Loading hide
-video.addEventListener('loadeddata',()=>{
-  document.getElementById("loading").style.display="none";
-});
-
-// 👁️ Fake Live User Counter
-let users= Math.floor(Math.random()*500)+800;
-document.getElementById("users").innerText=users;
+// 👁️ Fake User Counter
+let users = Math.floor(Math.random()*600)+700;
+document.getElementById("users").innerText = users;
 setInterval(()=>{
   users += Math.floor(Math.random()*5)-2;
-  if(users<500) users=500;
-  document.getElementById("users").innerText=users;
+  if(users < 500) users = 500;
+  document.getElementById("users").innerText = users;
 },3000);
-</script>
-<!-- 🔵 CriccSojeeb Telegram Section -->
-<div class="cricc-tg-wrap">
-
-  <div class="cricc-tg-title">
-    📢 Join CriccSojeeb Telegram Channels
-  </div>
-
-  <a href="https://t.me/CriccSojeeb" target="_blank" class="cricc-btn live">
-    🔔 Join for Live Matches Links
-  </a>
-
-  <a href="https://t.me/+u1Mb0ix7KMkyMDJl" target="_blank" class="cricc-btn clips">
-    🎯 𝑳𝒊𝒗𝒆 𝑴𝒂𝒕𝒄𝒉𝒆𝒔 𝑪𝒍𝒊𝒑𝒔 – 𝑾𝒊𝒄𝒌𝒆𝒕𝒔 & 𝑩𝒐𝒖𝒏𝒅𝒂𝒓𝒊𝒆𝒔
-  </a>
-
-  <a href="https://t.me/+EJP2jkxFb-phMThl" target="_blank" class="cricc-btn innings">
-    🧠 𝑪𝒓𝒊𝒄𝒄𝑺𝒐𝒋𝒆𝒆𝒃 𝑰𝒏𝒏𝒊𝒏𝒈𝒔 & 𝑺𝒑𝒆𝒍𝒍
-  </a>
-
-  <button class="cricc-btn share" onclick="shareCriccSojeeb()">
-    ❤️ Share This Page
-  </button>
-
-</div>
-
-<style>
-.cricc-tg-wrap{
-  margin:16px;
-  background:linear-gradient(135deg,#0a1f44,#020617);
-  padding:16px;
-  border-radius:14px;
-  text-align:center;
-  box-shadow:0 0 15px rgba(0,255,204,0.15);
-}
-.cricc-tg-title{
-  color:#fff;
-  font-size:16px;
-  font-weight:bold;
-  margin-bottom:14px;
-}
-.cricc-btn{
-  display:block;
-  width:100%;
-  margin:10px 0;
-  padding:13px;
-  border-radius:10px;
-  font-size:15px;
-  font-weight:bold;
-  text-decoration:none;
-  color:#fff;
-  border:none;
-  cursor:pointer;
-  transition:0.3s;
-}
-.cricc-btn.live{
-  background:#0088cc;
-}
-.cricc-btn.clips{
-  background:#1e40af;
-}
-.cricc-btn.innings{
-  background:#4f46e5;
-}
-.cricc-btn.share{
-  background:#16a34a;
-}
-.cricc-btn:hover{
-  transform:scale(1.02);
-  opacity:0.95;
-}
-</style>
-
-<script>
-function shareCriccSojeeb(){
-  if(navigator.share){
-    navigator.share({
-      title: 'CriccSojeeb Live',
-      text: 'Watch Live Matches & Clips on CriccSojeeb',
-      url: window.location.href
-    });
-  }else{
-    alert("Copy & share this link:\n"+window.location.href);
-  }
-}
 </script>
 
 </body>
 </html>
-
-
-
