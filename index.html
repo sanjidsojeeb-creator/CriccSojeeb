@@ -13,7 +13,7 @@
 body{
   margin:0;
   background:#050b18;
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
   color:#fff;
 }
 .header{
@@ -24,6 +24,7 @@ body{
   font-weight:bold;
 }
 .sub{font-size:13px;opacity:.8}
+.player-box{margin:10px}
 .info{
   margin:10px;
   background:#0a1f44;
@@ -32,23 +33,6 @@ body{
   font-size:14px;
 }
 .counter{color:#00ffcc;font-weight:bold}
-
-/* PLAYER FIXED SIZE */
-.player-wrapper{
-  position:relative;
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-  border-radius:12px;
-  overflow:hidden;
-  margin:10px;
-}
-.player-wrapper video{
-  width:100%;
-  height:100%;
-}
-
-/* Telegram Box */
 .tg-box{
   margin:15px;
   padding:15px;
@@ -73,105 +57,7 @@ body{
 
 <div class="header">
   CriccSojeeb Live
-  <div class="sub">Live Sports Streaming</div>
 </div>
-
-<div class="info">
- 🔴 LIVE NOW <br>
- 👁️ Watching: <span class="counter" id="users">0</span>
-</div>
-
-<div class="player-wrapper">
-  <video id="player" controls playsinline webkit-playsinline></video>
-</div>
-
-<div class="tg-box">
-  <a href="https://t.me/CriccSojeeb" target="_blank">
-    🔔 Join Telegram for Live Match Links
-  </a>
-</div>
-
-<script>
-// 🔐 Inspect Protection (basic)
-document.onkeydown=function(e){
-  if(e.keyCode==123) return false;
-  if(e.ctrlKey && e.shiftKey && e.keyCode==73) return false;
-};
-
-// 🔔 Telegram Join / Skip Popup (one time)
-if(!localStorage.getItem("tg_skip")){
-  setTimeout(()=>{
-    if(confirm("Join CriccSojeeb Telegram Channel for live links?")){
-      window.location.href="https://t.me/CriccSojeeb";
-    }else{
-      localStorage.setItem("tg_skip","yes");
-    }
-  },1500);
-}
-
-/* ========== CHANNEL ADMIN PANEL ========== */
-const CHANNELS = {
-  criclife:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=303627" },
-  cricbuzz:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=303629" },
-  willow:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=13141" },
-  willow2:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=282231" },
-  sky:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=10527" },
-  tnt:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=77413" },
-  fox:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=197185" },
-  star:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276736" },
-  sony:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276737" },
-  zee:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276907" },
-  geo:{ url:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=49242" },
-  fancode:{ url:"https://bd-mc-fdlive.fancode.com/mumbai/138739_english_hls_3e7a73d0358892_1ta-di_h264/index.m3u8" }
-};
-
-/* ========== STREAM SELECT ========== */
-const params = new URLSearchParams(window.location.search);
-const ch = params.get("ch");
-
-if(!ch || !CHANNELS[ch]){
-  alert("❌ Invalid or Private Stream Link");
-  throw new Error("No Stream");
-}
-
-const source = CHANNELS[ch].url;
-const video = document.getElementById("player");
-
-/* ▶️ HLS PLAY */
-if(Hls.isSupported()){
-  const hls = new Hls();
-  hls.loadSource(source);
-  hls.attachMedia(video);
-}else{
-  video.src = source;
-}
-
-/* 🎛 PLAYER UI + FULLSCREEN */
-new Plyr(video,{
-  fullscreen:{
-    enabled:true,
-    fallback:true,
-    iosNative:true
-  },
-  quality:{
-    default:'auto',
-    options:['auto',1080,720,480,360],
-    forced:true
-  }
-});
-
-// 👁️ Fake Viewer Counter
-let users=Math.floor(Math.random()*600)+700;
-document.getElementById("users").innerText=users;
-setInterval(()=>{
-  users+=Math.floor(Math.random()*5)-2;
-  if(users<500) users=500;
-  document.getElementById("users").innerText=users;
-},3000);
-</script>
-
-</body>
-</html></div>
 
 <div class="player-box">
   <video id="player" controls playsinline></video>
@@ -274,18 +160,12 @@ if(Hls.isSupported()){
   video.src = source;
 }
 
+// 🎛 Plyr UI
 new Plyr(video,{
-  fullscreen:{
-    enabled:true,
-    fallback:true,
-    iosNative:true
-  },
   quality:{
     default:'auto',
     options:['auto',1080,720,480,360],
     forced:true
-  }
-});
   }
 });
 
@@ -301,6 +181,3 @@ setInterval(()=>{
 
 </body>
 </html>
-
-
-
